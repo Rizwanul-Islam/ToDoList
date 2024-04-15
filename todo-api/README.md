@@ -2,9 +2,8 @@ ToDo Api service
 
 Overview
 
-The goal of the project is to implement endpoints, which are:
-
-CRUD operations of tasks of todo list
+    The goal of the project is to implement endpoints, which are:
+    CRUD operations of tasks of todo list
 
 System Requirements
 
