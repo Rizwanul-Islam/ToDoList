@@ -1,0 +1,53 @@
+.todo-list {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .todo-list h1 {
+    text-align: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr.overdue {
+    color: red;
+  }
+  
+  div > div {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  button {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #f2f2f2;
+  }
+  
