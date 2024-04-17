@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using MediatR;
 using ToDoService.Application.Contracts.Persistence;
 using ToDoService.Application.Features.Requests.Commands;
 using ToDoService.Application.Responses;
-using ToDoService.Application.Validators;
 using ToDoService.Domain.Entities;
 
 namespace ToDoService.Application.Features.Handlers.Commands;

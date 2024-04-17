@@ -31,7 +31,6 @@ public static class ConfigureServices
 
         _ = services.AddScoped<ITaskRepository, TaskRepository>();
 
-
         _ = services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         _ = services.AddScoped<ApplicationDbContextInitialiser>();

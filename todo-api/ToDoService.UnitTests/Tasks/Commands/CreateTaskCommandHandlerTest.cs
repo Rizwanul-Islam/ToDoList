@@ -7,7 +7,6 @@ using ToDoService.Application.Features.Handlers.Commands;
 using ToDoService.Application.Features.Requests.Commands;
 using ToDoService.Application.Profiles;
 using ToDoService.Application.Responses;
-using ToDoService.Domain.Entities;
 using ToDoService.UnitTests.Mocks;
 using Xunit;
 namespace ToDoService.UnitTests;
@@ -15,7 +14,7 @@ namespace ToDoService.UnitTests;
 public class CreateTaskCommandHandlerTest
 {
     private readonly IMapper _mapper;
-    private readonly TaskDto _taskDto;
+    private readonly CreateTaskDto _taskDto;
     private readonly Mock<ITaskRepository> _mockUow;
     private readonly CreateTaskCommandHandler _handler;
     private readonly MockTaskRepository _repo;
@@ -32,7 +31,7 @@ public class CreateTaskCommandHandlerTest
         _mapper = mapperConfig.CreateMapper();
         _handler = new CreateTaskCommandHandler(_mockUow.Object, _mapper);
 
-        _taskDto = new TaskDto
+        _taskDto = new CreateTaskDto
         {
             TaskName = "Test DTO Task",
             StartDate = DateTime.Now,

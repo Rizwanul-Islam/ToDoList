@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using ToDoService.Application.Features.Requests.Commands;
 using ToDoService.Domain.Entities;
 
 namespace ToDoService.Application.Validators;

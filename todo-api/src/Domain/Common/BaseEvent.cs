@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
 namespace ToDoService.Domain.Common;
-
 public abstract class BaseEvent : INotification
 {
 }

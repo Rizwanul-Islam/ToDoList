@@ -16,7 +16,7 @@ public class CreateTaskSummary : Summary<CreateTaskEndpoint>
     }
 }
 
-public class CreateTaskEndpoint : BaseEndpoint<TaskDto>
+public class CreateTaskEndpoint : BaseEndpoint<CreateTaskDto>
 {
     public CreateTaskEndpoint(ISender mediator, IMapper mapper)
         : base(mediator, mapper) { }
@@ -32,7 +32,7 @@ public class CreateTaskEndpoint : BaseEndpoint<TaskDto>
         Summary(new CreateTaskSummary());
     }
 
-    public override async Task HandleAsync(TaskDto req, CancellationToken ct)
+    public override async Task HandleAsync(CreateTaskDto req, CancellationToken ct)
     {
         var result = await Mediator.Send(
             new CreateTaskCommand

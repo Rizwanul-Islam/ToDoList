@@ -1,8 +1,8 @@
-﻿using ToDoService.Application.Common.Interfaces;
-using ToDoService.Domain.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using ToDoService.Application.Common.Interfaces;
+using ToDoService.Domain.Common;
 
 namespace ToDoService.Infrastructure.Persistence.Interceptors;
 

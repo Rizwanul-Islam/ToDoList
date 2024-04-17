@@ -7,6 +7,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<UpdateTaskDto, ToDoTask>()
+        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
         _ = CreateMap<ToDoTask, TaskDto>().ReverseMap();
     }
 }

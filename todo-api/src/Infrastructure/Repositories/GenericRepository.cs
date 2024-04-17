@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ToDoService.Application.Contracts.Persistence;
 using ToDoService.Infrastructure.Persistence;
 
@@ -51,7 +46,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public async Task Save()
     {
-        await _dbContext.SaveChangesAsync();
+        _ = await _dbContext.SaveChangesAsync();
     }
 
 

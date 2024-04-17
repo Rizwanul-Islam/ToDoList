@@ -37,7 +37,7 @@ public class UpdateTaskEndpoint : BaseEndpoint<UpdateTaskDto>
         var result = await Mediator.Send(
             new UpdateTaskCommand
             {
-                TaskDto = req.Task
+                updateTaskDto = req
             },
             ct
         );

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using ToDoService.Application.Common.Interfaces;
-using ToDoService.Infrastructure.Persistence.Interceptors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ToDoService.Application.Common.Interfaces;
 using ToDoService.Domain.Entities;
+using ToDoService.Infrastructure.Persistence.Interceptors;
 
 namespace ToDoService.Infrastructure.Persistence;
 

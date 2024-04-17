@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ToDoService.Application.DTOs;
-using ToDoService.Application.Features.Requests.Commands;
 
 namespace ToDoService.Application.Validators;
 public class UpdateTaskValidator : AbstractValidator<TaskDto>

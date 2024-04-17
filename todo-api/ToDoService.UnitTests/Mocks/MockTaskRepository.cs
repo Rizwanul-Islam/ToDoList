@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ToDoService.Application.Contracts.Persistence;
 using ToDoService.Application.DTOs;
 using ToDoService.Application.Profiles;
@@ -32,22 +29,19 @@ public class MockTaskRepository
             {
                 TaskName = "Task1kdfhkjds",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(7),
-                IsDone = false
+                EndDate = DateTime.Now.AddDays(7)
             }),
             CreateTaskFromDto(new TaskDto
             {
                 TaskName = "Task1sdjfhd",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(14),
-                IsDone = false
+                EndDate = DateTime.Now.AddDays(14)
             }),
             CreateTaskFromDto(new TaskDto
             {
                 TaskName = "Task1skdhfk",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(14),
-                IsDone = false
+                EndDate = DateTime.Now.AddDays(14)
             })
         };
 

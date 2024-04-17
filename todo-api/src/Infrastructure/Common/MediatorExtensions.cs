@@ -1,5 +1,5 @@
-﻿using ToDoService.Domain.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ToDoService.Domain.Common;
 
 namespace MediatR;
 

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
 using ToDoService.Application.Common.Exceptions;
 using ToDoService.Application.Contracts.Persistence;
 using ToDoService.Application.Features.Requests.Commands;
-using ToDoService.Application.Responses;
-using ToDoService.Domain.Entities;
 
 namespace ToDoService.Application.Features.Handlers.Commands;
 public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand>

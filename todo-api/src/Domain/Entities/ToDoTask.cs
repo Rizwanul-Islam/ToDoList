@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using ToDoService.Domain.Common;
+﻿using ToDoService.Domain.Common;
 using ToDoService.Domain.Exceptions;
 using ToDoService.Domain.Validators;
 
@@ -12,10 +10,10 @@ public sealed class ToDoTask : BaseEntity
 
     }
     public string? TaskName { get; private set; }
-    public DateTime StartDate { get; private set; }
-    public DateTime EndDate { get; private set; }
+    public DateTime? StartDate { get; private set; }
+    public DateTime? EndDate { get; private set; }
     public bool IsDone { get; private set; }
-    public DateTime Created { get; private set; }
+    public DateTime? Created { get; private set; }
     public string? CreatedBy { get; private set; }
     public DateTime? LastModified { get; private set; }
 
@@ -31,8 +29,7 @@ public sealed class ToDoTask : BaseEntity
     public static ToDoTask UpdateTask(ToDoTask task)
     {
         ValidateTask(task);
-        task.Created = DateTime.Now;
-        task.IsDone = false;
+        task.LastModified = DateTime.Now;
 
         return task;
     }
