@@ -37,6 +37,7 @@ builder.Services.AddSwaggerDoc(maxEndpointVersion: 1, tagIndex: 0, settings: x =
 var app = builder.Build();
 
 _ = app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 _ = app.UseCors("AllowOrigin"); // Enable CORS
 _ = app.UseFastEndpoints();
 

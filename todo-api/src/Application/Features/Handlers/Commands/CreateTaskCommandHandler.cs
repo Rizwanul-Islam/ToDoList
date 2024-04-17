@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using ToDoService.Application.Contracts.Persistence;
 using ToDoService.Application.Features.Requests.Commands;
@@ -21,26 +22,13 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, BaseC
     public async Task<BaseCommandResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         var response = new BaseCommandResponse();
-        var validator = new CreateTaskValidator();
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (validationResult.IsValid == false)
-        {
-            response.Success = false;
-            response.Message = "Creation Failed";
-            response.Errors = validationResult.Errors.Select(q => q.ErrorMessage).ToList();
-        }
-        else
-        {
-            var task = _mapper.Map<ToDoTask>(request.CreateTaskDto);
-            task.Created = DateTime.Now;
-            task = await _taskRepository.Add(task);
-            await _taskRepository.Save();
-
-            response.Success = true;
-            response.Message = "Creation Successful";
-            response.Id = task.Id;
-        }
+        var task = _mapper.Map<ToDoTask>(request.CreateTaskDto);
+        task = ToDoTask.CreateTask(task);
+        task = await _taskRepository.Add(task);
+        await _taskRepository.Save();
+        response.Success = true;
+        response.Message = "Creation Successful";
+        response.Id = task.Id;
         return response;
     }
 }

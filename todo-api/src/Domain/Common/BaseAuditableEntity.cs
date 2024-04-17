@@ -2,9 +2,9 @@
 
 public abstract class BaseAuditableEntity : BaseEntity
 {
-    public DateTime Created { get; set; } = default;
+    public DateTime Created { get; private set; }
 
-    public string? CreatedBy { get; set; }
+    public string? CreatedBy { get; private set; }
 
-    public DateTime? LastModified { get; set; } = default;
+    public DateTime? LastModified { get; private set; }
 }

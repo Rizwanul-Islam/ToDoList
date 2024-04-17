@@ -7,7 +7,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDoService.Application.Contracts.Persistence;
-using ToDoService.Application.Exceptions;
 using ToDoService.Application.Features.Requests.Commands;
 using ToDoService.Application.Responses;
 using ToDoService.Application.Validators;
@@ -27,15 +26,9 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Unit>
 
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
-        var validator = new UpdateTaskValidator();
-        var validationResult = await validator.ValidateAsync(request.TaskDto);
-
-        if (validationResult.IsValid == false)
-            throw new ValidationException(validationResult);
-
         var task = await _taskRepository.Get(request.TaskDto.Id);
         _ = _mapper.Map(request.TaskDto, task);
-        task.LastModified = DateTime.Now;
+        task = ToDoTask.UpdateTask(task);
         await _taskRepository.Update(task);
         await _taskRepository.Save();
 

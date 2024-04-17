@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
-using ToDoService.Application.Features.Requests.Commands;
 using ToDoService.Domain.Entities;
 
-namespace ToDoService.Application.Validators;
+namespace ToDoService.Domain.Validators;
 public class CreateTaskValidator : AbstractValidator<ToDoTask>
 {
     public CreateTaskValidator()

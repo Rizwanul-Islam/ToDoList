@@ -12,10 +12,6 @@ public static class ConfigureServices
         _ = services.AddAutoMapper(Assembly.GetExecutingAssembly());
         _ = services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         _ = services.AddMediatR(Assembly.GetExecutingAssembly());
-        _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
-        _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        _ = services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-
         return services;
     }
 }

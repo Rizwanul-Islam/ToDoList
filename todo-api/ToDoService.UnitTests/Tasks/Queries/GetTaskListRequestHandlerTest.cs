@@ -14,9 +14,12 @@ public class GetTaskListRequestHandlerTest
 {
     private readonly IMapper _mapper;
     private readonly Mock<ITaskRepository> _mockRepo;
+    private readonly MockTaskRepository _repo;
+
     public GetTaskListRequestHandlerTest()
     {
-        _mockRepo = MockTaskRepository.GetTaskRepository();
+        _repo = new MockTaskRepository();
+        _mockRepo = _repo.GetTaskRepository();
 
         var mapperConfig = new MapperConfiguration(c =>
         {

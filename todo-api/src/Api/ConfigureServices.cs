@@ -8,7 +8,7 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddSingleton<ExceptionHandlingMiddleware>();
+        //_ = services.AddSingleton<ExceptionHandlingMiddleware>();
 
         _ = services.AddHttpContextAccessor();
 

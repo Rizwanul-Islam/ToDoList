@@ -8,8 +8,7 @@ using ToDoService.Application.DTOs.Common;
 namespace ToDoService.Application.DTOs;
 public class TaskDto : BaseDto
 {
-    public string? TaskName { get; set; } = default;
-    public DateTime StartDate { get; set; } = default;
-    public DateTime EndDate { get; set; } = default;
-    public bool IsDone { get; set; } = false;
+    public string? TaskName { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

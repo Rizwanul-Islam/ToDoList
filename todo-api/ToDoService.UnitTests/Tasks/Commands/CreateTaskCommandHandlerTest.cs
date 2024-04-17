@@ -18,10 +18,12 @@ public class CreateTaskCommandHandlerTest
     private readonly TaskDto _taskDto;
     private readonly Mock<ITaskRepository> _mockUow;
     private readonly CreateTaskCommandHandler _handler;
+    private readonly MockTaskRepository _repo;
 
     public CreateTaskCommandHandlerTest()
     {
-        _mockUow = MockTaskRepository.GetTaskRepository();
+        _repo = new MockTaskRepository();
+        _mockUow = _repo.GetTaskRepository();
         var mapperConfig = new MapperConfiguration(c =>
         {
             c.AddProfile<MappingProfile>();
