@@ -6,6 +6,8 @@ import { TextField, Button, Grid, Paper, InputLabel, Typography, Table, TableBod
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const taskService = new TaskService('http://localhost:5246');
 
@@ -31,7 +33,6 @@ const TodoList: React.FC = () => {
       setError('Task name must be longer than 10 characters.');
       return;
     }
-
     const taskToCreate: Task = {
       taskName: newTask.taskName,
       startDate: newTask.startDate,
@@ -47,6 +48,11 @@ const TodoList: React.FC = () => {
           endDate: ''
         });
         setError('');
+        toast.success('Task created successfully');
+      })
+      .catch((error) => {
+        console.error('Error creating task:', error);
+        toast.error('Failed to create task');
       });
   };
 
@@ -58,6 +64,11 @@ const TodoList: React.FC = () => {
     taskService.deleteTask(id)
       .then(() => {
         setTasks(tasks.filter(task => task.id !== id));
+        toast.success('Task deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
+        toast.error('Failed to delete task');
       });
   };
 
@@ -81,9 +92,11 @@ const TodoList: React.FC = () => {
           return task;
         });
         setTasks(updatedTasks);
+        toast.success('Task marked as done');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error marking task as done:', error);
+        toast.error('Failed to mark task as done');
       });
   };
 
@@ -117,7 +130,7 @@ const TodoList: React.FC = () => {
             <form onSubmit={createTask}>
               <Grid container direction="column" spacing={2} sx={{ padding: '20px' }}>
                 <Grid item>
-                <InputLabel htmlFor="taskName">Task Name</InputLabel>
+                  <InputLabel htmlFor="taskName">Task Name</InputLabel>
                   <TextField
                     fullWidth
                     id="taskName"
@@ -129,7 +142,7 @@ const TodoList: React.FC = () => {
                 </Grid>
                 <Grid item container spacing={2}>
                   <Grid item xs={6}>
-                  <InputLabel htmlFor="startDate">Start Date</InputLabel>
+                    <InputLabel htmlFor="startDate">Start Date</InputLabel>
                     <TextField
                       fullWidth
                       id="startDate"
@@ -141,7 +154,7 @@ const TodoList: React.FC = () => {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                  <InputLabel htmlFor="endDate">End Date</InputLabel>
+                    <InputLabel htmlFor="endDate">End Date</InputLabel>
                     <TextField
                       fullWidth
                       id="endDate"
@@ -180,20 +193,21 @@ const TodoList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-  {tasks.map(task => (
-    <TableRow key={task.id} className={isOverdue(task.endDate) ? 'overdue' : ''}>
-      <TableCell>{task.taskName}</TableCell>
-      <TableCell>{formatDate(task.startDate)}</TableCell>
-      <TableCell>{formatDate(task.endDate)}</TableCell>
-      <TableCell>
-        <Button onClick={() => deleteTask(task.id)} startIcon={<DeleteIcon />} size="small">Delete</Button>
-        {!task.isDone && <Button onClick={() => handleTaskDone(task.id)} startIcon={<DoneIcon />} size="small">Done</Button>}
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
+            {tasks.map(task => (
+              <TableRow key={task.id} className={isOverdue(task.endDate) ? 'overdue' : ''}>
+                <TableCell>{task.taskName}</TableCell>
+                <TableCell>{formatDate(task.startDate)}</TableCell>
+                <TableCell>{formatDate(task.endDate)}</TableCell>
+                <TableCell>
+                  <Button onClick={() => deleteTask(task.id)} startIcon={<DeleteIcon />} size="small">Delete</Button>
+                  {!task.isDone && <Button onClick={() => handleTaskDone(task.id)} startIcon={<DoneIcon />} size="small">Done</Button>}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
+      <ToastContainer position="top-right" />
     </div>
   );
 };
