@@ -24,7 +24,7 @@ public class DeleteTaskEndpoint : BaseEndpoint<GetTaskDetailRequest>
     public override void Configure()
     {
         base.Configure();
-        Delete("t/{Id}");
+        Delete("task/delete/{Id}");
         AllowAnonymous();
         Description(
             d => d.WithTags("Task")

@@ -23,7 +23,7 @@ public class GetTaskDetailsEndpoint : BaseEndpoint<GetTaskDetailRequest>
     public override void Configure()
     {
         base.Configure();
-        Get("t/{Id}");
+        Get("task/details/{Id}");
         AllowAnonymous();
         Description(
             d => d.WithTags("Task")

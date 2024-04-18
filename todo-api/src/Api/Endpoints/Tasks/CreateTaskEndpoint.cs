@@ -24,7 +24,7 @@ public class CreateTaskEndpoint : BaseEndpoint<CreateTaskDto>
     public override void Configure()
     {
         base.Configure();
-        Post("t");
+        Post("task/create");
         AllowAnonymous();
         Description(
             d => d.WithTags("Task")

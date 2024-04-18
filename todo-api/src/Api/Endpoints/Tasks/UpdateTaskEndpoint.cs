@@ -24,7 +24,7 @@ public class UpdateTaskEndpoint : BaseEndpoint<UpdateTaskDto>
     public override void Configure()
     {
         base.Configure();
-        Put("t/{Id}");
+        Put("task/update/{Id}");
         AllowAnonymous();
         Description(
             d => d.WithTags("Task")

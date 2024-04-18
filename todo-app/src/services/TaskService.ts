@@ -9,7 +9,7 @@ export class TaskService {
 
   async fetchTasks(): Promise<Task[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/tl`);
+      const response = await fetch(`${this.baseUrl}/task/list`);
       if (!response.ok) {
         throw new Error('Failed to fetch tasks');
       }
@@ -22,7 +22,7 @@ export class TaskService {
 
   async createTask(newTask: Task): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/t`, {
+      const response = await fetch(`${this.baseUrl}/task/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export class TaskService {
 
   async updateTask(id: number, updatedTask: Task): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/t/${id}`, {
+      const response = await fetch(`${this.baseUrl}/task/update/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export class TaskService {
 
   async deleteTask(id: number): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/t/${id}`, {
+      const response = await fetch(`${this.baseUrl}/task/delete/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
