@@ -5,10 +5,13 @@ using ToDoService.Domain.Validators;
 namespace ToDoService.Domain.Entities;
 public sealed class ToDoTask : BaseEntity
 {
-    private ToDoTask()
+    private ToDoTask(string? taskName, DateTime? startDate, DateTime? endDate)
     {
-
+        TaskName = taskName;
+        StartDate = startDate;
+        EndDate = endDate;
     }
+    private ToDoTask() { }
     public string? TaskName { get; private set; }
     public DateTime? StartDate { get; private set; }
     public DateTime? EndDate { get; private set; }
@@ -17,23 +20,28 @@ public sealed class ToDoTask : BaseEntity
     public string? CreatedBy { get; private set; }
     public DateTime? LastModified { get; private set; }
 
-
-    public static ToDoTask CreateTask(ToDoTask task)
+    public static ToDoTask CreateTask(string? taskName, DateTime? startDate, DateTime? endDate)
     {
-        ValidateTask(task);
+        var task = new ToDoTask(taskName, startDate, endDate);
         task.Created = DateTime.Now;
         task.IsDone = false;
+        ValidateTask(task);
 
         return task;
     }
-    public static ToDoTask UpdateTask(ToDoTask task)
+
+    public static ToDoTask UpdateTask(ToDoTask task, string? newTaskName, DateTime? newStartDate, DateTime? newEndDate, bool isDone)
     {
-        ValidateTask(task);
+        task.TaskName = newTaskName;
+        task.StartDate = newStartDate;
+        task.EndDate = newEndDate;
+        task.IsDone = isDone;
         task.LastModified = DateTime.Now;
 
+        ValidateTask(task);
+
         return task;
     }
-
     public static void ValidateTask(ToDoTask task)
     {
         var validator = new CreateTaskValidator();

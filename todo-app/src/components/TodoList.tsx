@@ -1,101 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import './TodoList.css';
+import '../TodoList.css';
+import { Task } from '../interfaces/Task';
+import { TaskService } from '../services/TaskService';
+import { TextField, Button, Grid, Paper, InputLabel, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DoneIcon from '@mui/icons-material/Done';
 
-interface Task {
-  taskName: string;
-  startDate: string;
-  endDate: string;
-  id: number;
-  isDone : boolean
-}
+const taskService = new TaskService('http://localhost:5246');
 
 const TodoList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskName, setNewTaskName] = useState('');
-  const [newTaskStartDate, setNewTaskStartDate] = useState('');
-  const [newTaskEndDate, setNewTaskEndDate] = useState('');
+  const [newTask, setNewTask] = useState({
+    taskName: '',
+    startDate: '',
+    endDate: ''
+  });
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5246/tl')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch tasks');
-        }
-        return response.json();
-      })
+    taskService.fetchTasks()
       .then(data => {
         setTasks(data);
-      })
-      .catch(error => {
-        console.error('Error fetching tasks:', error);
       });
   }, []);
 
   const createTask = () => {
-    if (newTaskName.length <= 10) {
+    // Validation logic here
+    if (newTask.taskName.length <= 10) {
       setError('Task name must be longer than 10 characters.');
       return;
     }
 
-    const newTask: Task = {
-      taskName: newTaskName,
-      startDate: newTaskStartDate,
-      endDate: newTaskEndDate,
-      id: 0, // Dummy ID for now
-      isDone: false 
+    const taskToCreate: Task = {
+      taskName: newTask.taskName,
+      startDate: newTask.startDate,
+      endDate: newTask.endDate
     };
 
-    fetch('http://localhost:5246/t', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newTask),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to create task');
-        }
-        return response.json();
-      })
+    taskService.createTask(taskToCreate)
       .then(() => {
-        setTasks([...tasks, newTask]);
-        setNewTaskName('');
-        setNewTaskStartDate('');
-        setNewTaskEndDate('');
+        setTasks([...tasks, taskToCreate]);
+        setNewTask({
+          taskName: '',
+          startDate: '',
+          endDate: ''
+        });
         setError('');
-      })
-      .catch(error => {
-        console.error('Error creating task:', error);
       });
   };
 
-  const deleteTask = (id: number) => {
-    fetch(`http://localhost:5246/t/${id}`, {
-      method: 'POST',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to delete task');
-        }
+  const deleteTask = (id?: number) => {
+    if (id === undefined) {
+      console.error('Invalid ID');
+      return;
+    }
+    taskService.deleteTask(id)
+      .then(() => {
         setTasks(tasks.filter(task => task.id !== id));
-      })
-      .catch(error => {
-        console.error('Error deleting task:', error);
       });
   };
 
-  const handleTaskNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTaskName(event.target.value);
+  const handleTaskDone = (id?: number) => {
+    if (id === undefined) {
+      console.error('Invalid ID');
+      return;
+    }
+    const taskToUpdate = tasks.find(task => task.id === id);
+    if (!taskToUpdate) {
+      console.error('Task not found');
+      return;
+    }
+    const updatedTask: Task = { ...taskToUpdate, isDone: true };
+    taskService.updateTask(id, updatedTask)
+      .then(() => {
+        const updatedTasks = tasks.map(task => {
+          if (task.id === id) {
+            return { ...task, isDone: true };
+          }
+          return task;
+        });
+        setTasks(updatedTasks);
+      })
+      .catch(error => {
+        console.error('Error marking task as done:', error);
+      });
   };
 
-  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTaskStartDate(event.target.value);
-  };
-
-  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTaskEndDate(event.target.value);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewTask(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   // Function to format date as "24 April 2024"
@@ -104,51 +101,99 @@ const TodoList: React.FC = () => {
     return date.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
   };
 
+  // Function to check if a task is overdue
+  const isOverdue = (endDate: string) => {
+    return new Date(endDate) < new Date();
+  };
+
   return (
-    <div>
-      <h1>Todo App</h1>
-      <div>
-        <h2>Create New Task</h2>
-        <div>
-          <label>Task Name:</label>
-          <input type="text" value={newTaskName} onChange={handleTaskNameChange} />
-        </div>
-        <div>
-          <label>Start Date:</label>
-          <input type="date" value={newTaskStartDate} onChange={handleStartDateChange} />
-        </div>
-        <div>
-          <label>End Date:</label>
-          <input type="date" value={newTaskEndDate} onChange={handleEndDateChange} />
-        </div>
-        <button onClick={createTask}>Create Task</button>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-      </div>
-      <h1>Todo List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Task Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map(task => (
-            <tr key={task.id} className={new Date(task.endDate) < new Date() ? 'overdue' : ''}>
-              <td>{task.taskName}</td>
-              <td>{formatDate(task.startDate)}</td>
-              <td>{formatDate(task.endDate)}</td>
-              <td>
-                <button onClick={() => deleteTask(task.id)}>Delete</button>
-                {!task.isDone && <button onClick={() => console.log('Task done')}>Done</button>}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      
+    <div className="container">
+      <Typography variant="h4" gutterBottom>
+        Todo app
+      </Typography>
+      <Grid container justifyContent="center">
+        <Grid item xs={6}>
+          <Paper elevation={3} className="form-container">
+            <form onSubmit={createTask}>
+              <Grid container direction="column" spacing={2} sx={{ padding: '20px' }}>
+                <Grid item>
+                <InputLabel htmlFor="taskName">Task Name</InputLabel>
+                  <TextField
+                    fullWidth
+                    id="taskName"
+                    name="taskName"
+                    variant="outlined"
+                    value={newTask.taskName}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item container spacing={2}>
+                  <Grid item xs={6}>
+                  <InputLabel htmlFor="startDate">Start Date</InputLabel>
+                    <TextField
+                      fullWidth
+                      id="startDate"
+                      type="date"
+                      name="startDate"
+                      variant="outlined"
+                      value={newTask.startDate}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                  <InputLabel htmlFor="endDate">End Date</InputLabel>
+                    <TextField
+                      fullWidth
+                      id="endDate"
+                      type="date"
+                      name="endDate"
+                      variant="outlined"
+                      value={newTask.endDate}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddCircleOutlineOutlinedIcon />}
+                  style={{ marginTop: '16px' }}
+                >
+                  Create Task
+                </Button>
+                {error && <Typography variant="body2" color="error" style={{ marginTop: '8px' }}>{error}</Typography>}
+              </Grid>
+            </form>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <TableContainer component={Paper} style={{ marginTop: '16px' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Task Name</TableCell>
+              <TableCell>Start Date</TableCell>
+              <TableCell>End Date</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+  {tasks.map(task => (
+    <TableRow key={task.id} className={isOverdue(task.endDate) ? 'overdue' : ''}>
+      <TableCell>{task.taskName}</TableCell>
+      <TableCell>{formatDate(task.startDate)}</TableCell>
+      <TableCell>{formatDate(task.endDate)}</TableCell>
+      <TableCell>
+        <Button onClick={() => deleteTask(task.id)} startIcon={<DeleteIcon />} size="small">Delete</Button>
+        {!task.isDone && <Button onClick={() => handleTaskDone(task.id)} startIcon={<DoneIcon />} size="small">Done</Button>}
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

@@ -20,8 +20,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, BaseC
     public async Task<BaseCommandResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         var response = new BaseCommandResponse();
-        var task = _mapper.Map<ToDoTask>(request.CreateTaskDto);
-        task = ToDoTask.CreateTask(task);
+        var task = ToDoTask.CreateTask(request.CreateTaskDto.TaskName, request.CreateTaskDto.StartDate, request.CreateTaskDto.EndDate);
         task = await _taskRepository.Add(task);
         await _taskRepository.Save();
         response.Success = true;

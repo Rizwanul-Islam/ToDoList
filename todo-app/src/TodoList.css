@@ -23,7 +23,7 @@
     background-color: #f2f2f2;
   }
   
-  tr.overdue {
+  tr.overdue td{
     color: red;
   }
   
