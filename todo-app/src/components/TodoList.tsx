@@ -27,8 +27,9 @@ const TodoList: React.FC = () => {
       });
   }, []);
 
-  const createTask = () => {
-    // Validation logic here
+  const createTask = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+      
     if (newTask.taskName.length <= 10) {
       setError('Task name must be longer than 10 characters.');
       return;
@@ -38,41 +39,39 @@ const TodoList: React.FC = () => {
       startDate: newTask.startDate,
       endDate: newTask.endDate
     };
-
-    taskService.createTask(taskToCreate)
-      .then(() => {
-        setTasks([...tasks, taskToCreate]);
-        setNewTask({
-          taskName: '',
-          startDate: '',
-          endDate: ''
-        });
-        setError('');
-        toast.success('Task created successfully');
-      })
-      .catch((error) => {
-        console.error('Error creating task:', error);
-        toast.error('Failed to create task');
+  
+    try {
+      await taskService.createTask(taskToCreate);
+      setTasks([...tasks, taskToCreate]);
+      setNewTask({
+        taskName: '',
+        startDate: '',
+        endDate: ''
       });
+      setError('');
+      toast.success('Task created successfully');
+    } catch (error) {
+      console.error('Error creating task:', error);
+      toast.error('Failed to create task');
+    }
   };
 
-  const deleteTask = (id?: number) => {
+  const deleteTask = async (id?: number) => {
     if (id === undefined) {
       console.error('Invalid ID');
       return;
     }
-    taskService.deleteTask(id)
-      .then(() => {
-        setTasks(tasks.filter(task => task.id !== id));
-        toast.success('Task deleted successfully');
-      })
-      .catch((error) => {
-        console.error('Error deleting task:', error);
-        toast.error('Failed to delete task');
-      });
+    try {
+      await taskService.deleteTask(id);
+      setTasks(tasks.filter(task => task.id !== id));
+      toast.success('Task deleted successfully');
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      toast.error('Failed to delete task');
+    }
   };
 
-  const handleTaskDone = (id?: number) => {
+  const handleTaskDone = async (id?: number) => {
     if (id === undefined) {
       console.error('Invalid ID');
       return;
@@ -83,21 +82,20 @@ const TodoList: React.FC = () => {
       return;
     }
     const updatedTask: Task = { ...taskToUpdate, isDone: true };
-    taskService.updateTask(id, updatedTask)
-      .then(() => {
-        const updatedTasks = tasks.map(task => {
-          if (task.id === id) {
-            return { ...task, isDone: true };
-          }
-          return task;
-        });
-        setTasks(updatedTasks);
-        toast.success('Task marked as done');
-      })
-      .catch((error) => {
-        console.error('Error marking task as done:', error);
-        toast.error('Failed to mark task as done');
+    try {
+      await taskService.updateTask(id, updatedTask);
+      const updatedTasks = tasks.map(task => {
+        if (task.id === id) {
+          return { ...task, isDone: true };
+        }
+        return task;
       });
+      setTasks(updatedTasks);
+      toast.success('Task marked as done');
+    } catch (error) {
+      console.error('Error marking task as done:', error);
+      toast.error('Failed to mark task as done');
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
